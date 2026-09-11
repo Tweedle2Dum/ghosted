@@ -6,7 +6,6 @@ import { z } from "zod";
 export const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(1, "Password is required"),
-  userType: z.enum(["admin", "member", "creator", "guest"]),
   rememberMe: z.boolean().optional(),
 });
 
@@ -17,7 +16,6 @@ export type LoginFormData = z.infer<typeof loginSchema>;
 
 /**
  * Zod validation schema for user account registration forms.
- * Enforces minimum password length (8 characters), matching password confirmation, and terms acceptance.
  */
 export const registerSchema = z
   .object({
@@ -25,7 +23,6 @@ export const registerSchema = z
     email: z.string().email("Invalid email address"),
     password: z.string().min(8, "Password must be at least 8 characters long"),
     confirmPassword: z.string().min(1, "Please confirm your password"),
-    userType: z.enum(["admin", "member", "creator", "guest"]),
     termsAccepted: z.boolean().refine((val) => val === true, {
       message: "You must accept the terms and conditions",
     }),
@@ -56,7 +53,6 @@ export type RequestPasswordResetFormData = z.infer<
 
 /**
  * Zod validation schema for setting a new password via password reset token.
- * Enforces minimum password length (6 characters) and matching password confirmation.
  */
 export const confirmPasswordResetSchema = z
   .object({

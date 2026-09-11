@@ -12,9 +12,11 @@ let isRefreshing = false;
 let refreshPromise: Promise<void> | null = null;
 
 const apiClient = ky.create({
-  prefixUrl: `${env.NEXT_PUBLIC_API_URL}/api`,
+  prefixUrl:
+    typeof window !== "undefined" ? "/api" : `${env.NEXT_PUBLIC_APP_URL}/api`,
+  credentials: "include",
   retry: {
-    limit: 2,
+    limit: 1,
   },
   timeout: 30000,
   hooks: {

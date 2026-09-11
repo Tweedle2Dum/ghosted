@@ -7,7 +7,14 @@ import { z } from "zod";
  * Validates client and server environment variables at build-time and runtime.
  */
 export const env = createEnv({
-  server: {},
+  server: {
+    /** Supabase project URL (server-side, no NEXT_PUBLIC_ prefix) */
+    SUPABASE_URL: z.string().url(),
+    /** Supabase secret key (bypasses RLS, server-only) */
+    SUPABASE_SECRET_KEY: z.string().min(1),
+    /** Secret used to sign session JWTs stored in HTTP-only cookies */
+    SESSION_SECRET: z.string().min(16),
+  },
   client: {
     /** Web application frontend root URL */
     NEXT_PUBLIC_APP_URL: z.string().url(),
@@ -26,6 +33,11 @@ export const env = createEnv({
     NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: z.string().min(1),
     /** Firebase App ID */
     NEXT_PUBLIC_FIREBASE_APP_ID: z.string().min(1),
+
+    /** Supabase project URL (client-side) */
+    NEXT_PUBLIC_SUPABASE_URL: z.string().url(),
+    /** Supabase publishable key (safe to expose) */
+    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: z.string().min(1),
   },
   experimental__runtimeEnv: {
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
@@ -40,5 +52,8 @@ export const env = createEnv({
     NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID:
       process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
     NEXT_PUBLIC_FIREBASE_APP_ID: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
+      process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
   },
 });

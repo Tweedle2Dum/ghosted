@@ -95,3 +95,32 @@ export async function mapError(error: unknown): Promise<AppError> {
   // Unknown error
   return new AppError("Something went wrong");
 }
+
+/**
+ * Maps database/Postgrest errors into normalized AppError instances.
+ */
+export function mapDbError(
+  error: unknown,
+  fallbackMessage = "Database operation failed",
+): AppError {
+  if (error instanceof AppError) {
+    return error;
+  }
+  if (error && typeof error === "object" && "message" in error) {
+    const err = error as {
+      message?: string;
+      code?: string;
+      details?: string;
+      hint?: string;
+    };
+    const status = err.code === "PGRST116" ? 404 : 500;
+    return new AppError(err.message || fallbackMessage, {
+      code: err.code || "DB_ERROR",
+      status,
+    });
+  }
+  if (error instanceof Error) {
+    return new AppError(error.message, { code: "DB_ERROR", status: 500 });
+  }
+  return new AppError(fallbackMessage, { code: "DB_ERROR", status: 500 });
+}

@@ -26,18 +26,15 @@ export function NavUser({ className }: { className?: string }) {
   if (!user) return null;
 
   const handleLogout = () => {
-    logout.mutate(
-      { role: user.role },
-      {
-        onSuccess: () => {
-          toast.success("Signed out successfully");
-          router.push("/login");
-        },
-        onError: (err) => {
-          toast.error(err.message || "Logout failed");
-        },
+    logout.mutate(undefined, {
+      onSuccess: () => {
+        toast.success("Signed out successfully");
+        router.push("/login");
       },
-    );
+      onError: (err) => {
+        toast.error(err.message || "Logout failed");
+      },
+    });
   };
 
   return (

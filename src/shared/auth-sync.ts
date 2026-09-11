@@ -23,27 +23,10 @@ const _listeners = new Set<() => void>();
 
 /**
  * Observable authentication store implementing the `useSyncExternalStore` contract.
- *
- * Facilitates synchronized auth state propagation across disparate React component trees
- * and non-React modules (such as the Ky HTTP client interceptors and routing guards)
- * without incurring unnecessary re-renders.
- *
- * @example
- * ```ts
- * import { useSyncExternalStore } from "react";
- * import { authSync } from "@/shared/auth-sync";
- *
- * function AuthStatus() {
- *   const auth = useSyncExternalStore(authSync.subscribe, authSync.getSnapshot);
- *   return <span>{auth.isAuthenticated ? "Logged In" : "Logged Out"}</span>;
- * }
- * ```
  */
 export const authSync = {
   /**
    * Returns the current synchronous snapshot of the authentication state.
-   *
-   * @returns Current immutable `AuthSyncState`.
    */
   getSnapshot(): AuthSyncState {
     return _state;
@@ -51,9 +34,6 @@ export const authSync = {
 
   /**
    * Subscribes a listener to authentication state transitions.
-   *
-   * @param onStoreChange - Callback function executed whenever login or logout is emitted.
-   * @returns Cleanup function that unregisters the listener.
    */
   subscribe(onStoreChange: () => void): () => void {
     _listeners.add(onStoreChange);
@@ -67,6 +47,14 @@ export const authSync = {
     for (const listener of _listeners) {
       listener();
     }
+  },
+
+  /**
+   * Initializes the store with a known authentication state (e.g. from server session).
+   */
+  init(isAuthenticated: boolean): void {
+    _state = { isAuthenticated, isInitialized: true };
+    this._emit();
   },
 
   /**

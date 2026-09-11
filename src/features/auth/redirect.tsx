@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { SplashLoader } from "@/widgets/loaders";
 
 interface RedirectProps {
@@ -22,8 +22,11 @@ export function Redirect({
 }: RedirectProps) {
   const nextRouter = useRouter();
   const router = customRouter || nextRouter;
+  const redirectedRef = useRef(false);
 
   useEffect(() => {
+    if (redirectedRef.current) return;
+    redirectedRef.current = true;
     onBeforeRedirect?.();
     if (replace) {
       router.replace(to);

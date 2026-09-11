@@ -42,7 +42,6 @@ export function SignupForm({
       email: "",
       password: "",
       confirmPassword: "",
-      userType: "admin",
       termsAccepted: true,
     },
   });
@@ -53,12 +52,11 @@ export function SignupForm({
         name: data.name,
         email: data.email,
         pass: data.password,
-        userType: data.userType,
       },
       {
         onSuccess: (_user) => {
           toast.success("Account created successfully!");
-          const target = getSafeRedirectPath(next, data.userType, "/dashboard");
+          const target = getSafeRedirectPath(next, "/dashboard");
           router.push(target);
         },
         onError: (err) => {
@@ -70,19 +68,16 @@ export function SignupForm({
   };
 
   const handleGoogleLogin = () => {
-    loginWithGoogle.mutate(
-      { userType: "admin" },
-      {
-        onSuccess: () => {
-          toast.success("Signed in with Google");
-          const target = getSafeRedirectPath(next, "admin", "/dashboard");
-          router.push(target);
-        },
-        onError: (err) => {
-          toast.error(err.message || "Google registration failed");
-        },
+    loginWithGoogle.mutate(undefined, {
+      onSuccess: () => {
+        toast.success("Signed in with Google");
+        const target = getSafeRedirectPath(next, "/dashboard");
+        router.push(target);
       },
-    );
+      onError: (err) => {
+        toast.error(err.message || "Google registration failed");
+      },
+    });
   };
 
   const isLoading =
@@ -97,10 +92,10 @@ export function SignupForm({
       <FieldGroup>
         <div className="flex flex-col gap-1 text-center sm:text-left">
           <TypographyH2 className="text-2xl font-bold tracking-tight">
-            Create Ghosted Workspace
+            Create Ghosted Account
           </TypographyH2>
           <TypographyP className="text-xs text-muted-foreground">
-            Start building with high-throughput autonomous agents.
+            Start tracking your job applications and resumes.
           </TypographyP>
         </div>
 
@@ -199,7 +194,7 @@ export function SignupForm({
           onClick={handleGoogleLogin}
           disabled={isLoading}
         >
-          Google Workspace
+          Google
         </Button>
 
         <p className="text-center text-xs text-muted-foreground">

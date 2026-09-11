@@ -1,10 +1,9 @@
 "use client";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEffect } from "react";
-import type { User, UserRole } from "@/entities/user";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { User } from "@/entities/user";
+import { api } from "@/shared/api";
 import { authSync } from "@/shared/auth-sync";
-import { tokenStorage } from "@/shared/lib/tokens";
 import {
   logout as apiLogout,
   confirmPasswordReset,
@@ -32,40 +31,35 @@ import type {
 } from "./types";
 
 /**
- * Hook to manage the authentication session.
- * Syncs with tokenStorage and authSync.
+ * Hook to manage the authentication session based on the server HTTP-only cookie.
+ * Queries /api/auth/session using the centralized `api` client.
  */
 export const useSession = () => {
-  useEffect(() => {
-    const token = tokenStorage.getAccessToken();
-    if (token) {
-      authSync.login();
-    } else {
-      authSync.logout();
-    }
-  }, []);
-
   return useQuery<User | null>({
     queryKey: ["session"],
     queryFn: async () => {
-      const token = tokenStorage.getAccessToken();
-      if (!token) return null;
-
-      const userType = tokenStorage.getUserType() || "admin";
-      return {
-        id: "usr_ghost_01",
-        shortId: "gh-01",
-        name: "Alex Vance",
-        email: "alex@ghosted.dev",
-        role: userType,
-        profile: {
-          bio: "Lead System Architect & Core Maintainer",
-          location: "San Francisco, CA",
-          isOnboarded: true,
-        },
-      };
+      try {
+        const response = await api.get<User>("auth/session", {
+          cache: "no-store",
+          retry: 0,
+        });
+        const user = response.data;
+        if (user) {
+          authSync.login();
+        } else {
+          authSync.logout();
+        }
+        return user;
+      } catch (error: any) {
+        authSync.logout();
+        if (error?.status === 401) {
+          return null;
+        }
+        throw error;
+      }
     },
-    staleTime: Infinity,
+    staleTime: 1000 * 60 * 5,
+    retry: false,
   });
 };
 
@@ -75,25 +69,32 @@ export const useSession = () => {
 export const useLoginWithEmail = (
   options?: AuthMutationOptions<LoginWithEmailVariables>,
 ) => {
+  const { onSuccess, ...rest } = options || {};
+  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ email, pass, userType }: LoginWithEmailVariables) =>
-      loginWithEmail(email, pass, userType),
-    ...options,
+    mutationFn: ({ email, pass }: LoginWithEmailVariables) =>
+      loginWithEmail(email, pass),
+    onSuccess: (data, variables, onMutateResult, context) => {
+      queryClient.setQueryData(["session"], data);
+      onSuccess?.(data, variables, onMutateResult, context);
+    },
+    ...rest,
   });
 };
 
 /**
  * Hook for logging in with Google.
  */
-export const useLoginWithGoogle = (
-  options?: AuthMutationOptions<{
-    userType?: UserRole;
-  }>,
-) => {
+export const useLoginWithGoogle = (options?: AuthMutationOptions<void>) => {
+  const { onSuccess, ...rest } = options || {};
+  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (vars?: { userType?: UserRole }) =>
-      loginWithGoogle(vars?.userType),
-    ...options,
+    mutationFn: () => loginWithGoogle(),
+    onSuccess: (data, variables, onMutateResult, context) => {
+      queryClient.setQueryData(["session"], data);
+      onSuccess?.(data, variables, onMutateResult, context);
+    },
+    ...rest,
   });
 };
 
@@ -103,23 +104,33 @@ export const useLoginWithGoogle = (
 export const useRegisterWithEmail = (
   options?: AuthMutationOptions<RegisterWithEmailVariables>,
 ) => {
+  const { onSuccess, ...rest } = options || {};
+  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ name, email, pass, userType }: RegisterWithEmailVariables) =>
-      registerWithEmail(email, pass, userType, name),
-    ...options,
+    mutationFn: ({ name, email, pass }: RegisterWithEmailVariables) =>
+      registerWithEmail(email, pass, name),
+    onSuccess: (data, variables, onMutateResult, context) => {
+      queryClient.setQueryData(["session"], data);
+      onSuccess?.(data, variables, onMutateResult, context);
+    },
+    ...rest,
   });
 };
 
 /**
  * Hook for logging out.
  */
-export const useLogout = (
-  options?: AuthMutationOptions<{ role?: UserRole } | undefined>,
-) => {
+export const useLogout = (options?: AuthMutationOptions<void>) => {
+  const { onSuccess, ...rest } = options || {};
+  const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (vars: { role?: UserRole } | undefined) =>
-      apiLogout(vars?.role),
-    ...options,
+    mutationFn: () => apiLogout(),
+    onSuccess: (data, variables, onMutateResult, context) => {
+      queryClient.setQueryData(["session"], null);
+      queryClient.clear();
+      onSuccess?.(data, variables, onMutateResult, context);
+    },
+    ...rest,
   });
 };
 
@@ -179,8 +190,7 @@ export const useConfirmPasswordReset = (
  */
 export const useVerifyEmail = (options?: VerifyEmailMutationOptions) => {
   return useMutation({
-    mutationFn: ({ code, role }: VerifyEmailVariables) =>
-      verifyEmail(code, role),
+    mutationFn: ({ code }: VerifyEmailVariables) => verifyEmail(code),
     ...options,
   });
 };

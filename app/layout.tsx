@@ -30,6 +30,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={cn("font-sans", clashGrotesk.variable)}
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
     >
       <body className={cn(clashGrotesk.variable, "antialiased")}>

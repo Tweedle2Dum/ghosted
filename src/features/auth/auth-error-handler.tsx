@@ -8,7 +8,6 @@ import type { AppError } from "@/shared/lib/errors";
 export function AuthErrorHandler() {
   const queryClient = useQueryClient();
   const router = useRouter();
-
   useEffect(() => {
     const unsubQuery = queryClient.getQueryCache().subscribe((event) => {
       const error = event.query.state.error as AppError | null;

@@ -26,20 +26,24 @@ import type { UserRole } from "@/entities/user";
  */
 export function getSafeRedirectPath(
   nextPath: string | null,
-  userType: UserRole,
-  defaultPath: string,
+  userTypeOrDefault?: UserRole | string,
+  defaultPath = "/dashboard",
 ): string {
-  if (!nextPath || nextPath === "") return defaultPath;
+  const fallback =
+    typeof userTypeOrDefault === "string" &&
+    !["admin", "member", "creator", "guest"].includes(userTypeOrDefault)
+      ? userTypeOrDefault
+      : defaultPath;
 
-  const roles: UserRole[] = ["admin", "member", "creator", "guest"];
-  const otherRoles = roles.filter((role) => role !== userType);
+  if (!nextPath || nextPath === "") return fallback;
 
-  const hasMismatch = otherRoles.some((role) =>
-    nextPath.startsWith(`/${role}/`),
-  );
-
-  if (hasMismatch) {
-    return defaultPath;
+  // Simple bypass: return target nextPath directly unless external URL
+  if (
+    nextPath.startsWith("http://") ||
+    nextPath.startsWith("https://") ||
+    nextPath.startsWith("//")
+  ) {
+    return fallback;
   }
 
   return nextPath;

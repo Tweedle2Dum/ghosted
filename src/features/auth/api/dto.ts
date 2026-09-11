@@ -1,10 +1,7 @@
-import type { UserRole } from "@/entities/user";
-
 export interface LoginRequest {
   email: string;
   password?: string;
   id_token?: string;
-  user_type?: UserRole;
 }
 
 export interface LoginResponse {
@@ -14,14 +11,12 @@ export interface LoginResponse {
   access_token: string;
   refresh_token: string;
   new_user?: boolean;
-  role: UserRole;
 }
 
 export interface RegisterRequest {
   name: string;
   email: string;
   password?: string;
-  user_type?: UserRole;
 }
 
 export interface RefreshTokenRequest {
@@ -35,7 +30,6 @@ export interface RefreshTokenResponse {
     user_id: string;
     name: string;
     email: string;
-    role: UserRole;
   };
 }
 

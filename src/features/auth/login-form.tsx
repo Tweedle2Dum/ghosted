@@ -36,9 +36,8 @@ export function LoginForm({
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "alex@ghosted.dev",
-      password: "password123",
-      userType: "admin",
+      email: "",
+      password: "",
       rememberMe: true,
     },
   });
@@ -48,12 +47,11 @@ export function LoginForm({
       {
         email: data.email,
         pass: data.password,
-        userType: data.userType,
       },
       {
         onSuccess: (user) => {
-          toast.success(`Welcome back, ${user?.name || "Alex"}!`);
-          const target = getSafeRedirectPath(next, data.userType, "/dashboard");
+          toast.success(`Welcome back, ${user?.name || "User"}!`);
+          const target = getSafeRedirectPath(next, "/dashboard");
           router.push(target);
         },
         onError: (err) => {
@@ -65,19 +63,16 @@ export function LoginForm({
   };
 
   const handleGoogleLogin = () => {
-    loginWithGoogle.mutate(
-      { userType: "admin" },
-      {
-        onSuccess: () => {
-          toast.success("Signed in with Google");
-          const target = getSafeRedirectPath(next, "admin", "/dashboard");
-          router.push(target);
-        },
-        onError: (err) => {
-          toast.error(err.message || "Google sign in failed");
-        },
+    loginWithGoogle.mutate(undefined, {
+      onSuccess: () => {
+        toast.success("Signed in with Google");
+        const target = getSafeRedirectPath(next, "/dashboard");
+        router.push(target);
       },
-    );
+      onError: (err) => {
+        toast.error(err.message || "Google sign in failed");
+      },
+    });
   };
 
   const isLoading =
@@ -95,7 +90,7 @@ export function LoginForm({
             Sign In to Ghosted
           </TypographyH2>
           <TypographyP className="text-xs text-muted-foreground">
-            Access your autonomous services, sub-agents, and telemetry.
+            Track your job applications, resumes, and interview pipeline.
           </TypographyP>
         </div>
 
@@ -121,13 +116,7 @@ export function LoginForm({
           <div className="flex items-center justify-between">
             <FieldLabel htmlFor="password">Password</FieldLabel>
             <Link
-              href="/login#reset"
-              onClick={(e) => {
-                e.preventDefault();
-                toast.info(
-                  "Password reset available in /reset-password route.",
-                );
-              }}
+              href="/reset-password"
               className="text-xs text-primary hover:underline"
             >
               Forgot password?
@@ -180,7 +169,7 @@ export function LoginForm({
           onClick={handleGoogleLogin}
           disabled={isLoading}
         >
-          Google Workspace
+          Google
         </Button>
 
         <p className="text-center text-xs text-muted-foreground">

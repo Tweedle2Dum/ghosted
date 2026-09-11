@@ -9,11 +9,4 @@ export interface BaseUser {
   createdAt?: number;
 }
 
-export interface User extends BaseUser {
-  role: UserRole;
-  profile?: {
-    bio?: string;
-    location?: string;
-    isOnboarded?: boolean;
-  };
-}
+export interface User extends BaseUser {}

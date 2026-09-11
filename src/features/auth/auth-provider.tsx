@@ -44,11 +44,16 @@ export const AuthProvider = ({
   const sessionQuery = useSession();
   const queryClient = useQueryClient();
   const pathname = usePathname();
-  const { isInitialized, isAuthenticated } = useSyncExternalStore(
+
+  const syncState = useSyncExternalStore(
     authSync.subscribe,
     authSync.getSnapshot,
     () => INITIAL_AUTH_STATE,
   );
+
+  const isInitialized = syncState.isInitialized || !sessionQuery.isLoading;
+  const isAuthenticated =
+    syncState.isAuthenticated || Boolean(sessionQuery.data);
   const router = useNavigate();
 
   const isPrivateRoute = PRIVATE_AUTH_GROUPS.some((group) =>

@@ -3,7 +3,7 @@ import type {
   UseMutationResult,
   UseQueryResult,
 } from "@tanstack/react-query";
-import type { User, UserRole } from "@/entities/user";
+import type { User } from "@/entities/user";
 import type { AppError } from "@/shared/lib/errors";
 import type {
   PasswordResetValidateResponse,
@@ -13,25 +13,23 @@ import type {
 export interface LoginWithEmailVariables {
   email: string;
   pass: string;
-  userType?: UserRole;
 }
 
 export interface RegisterWithEmailVariables {
   name?: string;
   email: string;
   pass: string;
-  userType?: UserRole;
 }
 
 export type AuthMutationResult<TVariables = void> = UseMutationResult<
-  User | undefined | null,
+  User | null,
   AppError,
   TVariables,
   unknown
 >;
 
 export type AuthMutationOptions<TVariables = void> = UseMutationOptions<
-  User | undefined | null,
+  User | null,
   AppError,
   TVariables,
   unknown
@@ -108,7 +106,6 @@ export type ResendVerificationMutationOptions = UseMutationOptions<
 
 export interface VerifyEmailVariables {
   code: string;
-  role?: UserRole;
 }
 
 export type VerifyEmailMutationResult = UseMutationResult<
@@ -133,16 +130,12 @@ export interface AuthContextValue {
     options?: AuthMutationOptions<LoginWithEmailVariables>,
   ) => AuthMutationResult<LoginWithEmailVariables>;
   useLoginWithGoogle: (
-    options?: AuthMutationOptions<{
-      userType?: UserRole;
-    }>,
-  ) => AuthMutationResult<{ userType?: UserRole }>;
+    options?: AuthMutationOptions<void>,
+  ) => AuthMutationResult<void>;
   useRegisterWithEmail: (
     options?: AuthMutationOptions<RegisterWithEmailVariables>,
   ) => AuthMutationResult<RegisterWithEmailVariables>;
-  useLogout: (
-    options?: AuthMutationOptions<{ role?: UserRole } | undefined>,
-  ) => AuthMutationResult<{ role?: UserRole } | undefined>;
+  useLogout: (options?: AuthMutationOptions<void>) => AuthMutationResult<void>;
   useValidatePasswordResetToken: (
     options?: ValidateResetTokenMutationOptions,
   ) => ValidateResetTokenMutationResult;
@@ -168,16 +161,12 @@ export interface AuthProviderProps {
     options?: AuthMutationOptions<LoginWithEmailVariables>,
   ) => AuthMutationResult<LoginWithEmailVariables>;
   useLoginWithGoogle: (
-    options?: AuthMutationOptions<{
-      userType?: UserRole;
-    }>,
-  ) => AuthMutationResult<{ userType?: UserRole }>;
+    options?: AuthMutationOptions<void>,
+  ) => AuthMutationResult<void>;
   useRegisterWithEmail: (
     options?: AuthMutationOptions<RegisterWithEmailVariables>,
   ) => AuthMutationResult<RegisterWithEmailVariables>;
-  useLogout: (
-    options?: AuthMutationOptions<{ role?: UserRole } | undefined>,
-  ) => AuthMutationResult<{ role?: UserRole } | undefined>;
+  useLogout: (options?: AuthMutationOptions<void>) => AuthMutationResult<void>;
   useValidatePasswordResetToken: (
     options?: ValidateResetTokenMutationOptions,
   ) => ValidateResetTokenMutationResult;
