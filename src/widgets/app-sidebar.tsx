@@ -1,13 +1,11 @@
 "use client";
 
 import {
-  Activity,
   BarChart3,
-  ChevronRight,
-  FolderGit2,
-  Home,
-  Layers,
-  Shield,
+  FileText,
+  Inbox,
+  LayoutDashboard,
+  Settings,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -29,37 +27,32 @@ import { NavUser } from "./nav-user";
 
 const MAIN_NAV = [
   {
-    title: "Overview",
+    title: "Dashboard",
     url: "/dashboard",
-    icon: Home,
+    icon: LayoutDashboard,
   },
   {
-    title: "Projects",
-    url: "/projects",
-    icon: FolderGit2,
+    title: "Ingestion Review",
+    url: "/ingestion",
+    icon: Inbox,
   },
   {
-    title: "Analytics",
-    url: "/analytics",
-    icon: BarChart3,
+    title: "Resume Versions",
+    url: "/resumes",
+    icon: FileText,
   },
 ];
 
 const PLATFORM_NAV = [
   {
-    title: "Telemetry Stream",
-    url: "#telemetry",
-    icon: Activity,
+    title: "Analytics",
+    url: "/analytics",
+    icon: BarChart3,
   },
   {
-    title: "Security Vault",
-    url: "#security",
-    icon: Shield,
-  },
-  {
-    title: "System Services",
-    url: "#services",
-    icon: Layers,
+    title: "Settings",
+    url: "/settings",
+    icon: Settings,
   },
 ];
 
@@ -83,7 +76,7 @@ export function AppSidebar() {
       <SidebarContent className="px-2 py-4">
         <SidebarGroup>
           <SidebarGroupLabel className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/70">
-            Workspaces
+            Applications
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -117,7 +110,7 @@ export function AppSidebar() {
 
         <SidebarGroup className="mt-4">
           <SidebarGroupLabel className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground/70">
-            Infrastructure
+            Platform
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -138,7 +131,6 @@ export function AppSidebar() {
                           {item.title}
                         </span>
                       </div>
-                      <ChevronRight className="size-3 text-muted-foreground/50 group-data-[collapsible=icon]:hidden" />
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
