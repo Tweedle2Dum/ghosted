@@ -19,7 +19,7 @@ export function AppHeader({
   const { theme, setTheme } = useTheme();
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-border/60 bg-background/80 px-4 md:px-6 backdrop-blur-md">
+    <header className="sticky top-0 z-30 flex h-16 w-full items-center justify-between border-b border-border/20 bg-background/60 px-4 md:px-6 backdrop-blur-xl">
       <div className="flex items-center gap-3">
         <SidebarTrigger className="hover:bg-accent text-muted-foreground hover:text-foreground" />
         <div className="h-5 w-px bg-border/60 hidden sm:block" />

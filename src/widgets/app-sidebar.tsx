@@ -69,10 +69,15 @@ export function AppSidebar() {
   return (
     <Sidebar
       collapsible="icon"
-      className="border-r border-border/70 bg-sidebar"
+      className="border-r border-transparent bg-background-secondary"
     >
-      <SidebarHeader className="h-16 flex items-center justify-between border-b border-border/40 px-4">
-        <Logo href="/" />
+      <SidebarHeader className="h-16 flex flex-row items-center justify-start group-data-[collapsible=icon]:justify-center border-b border-transparent px-4 group-data-[collapsible=icon]:px-0">
+        <Logo href="/" className="group-data-[collapsible=icon]:hidden" />
+        <Logo
+          href="/"
+          variant="icon"
+          className="hidden group-data-[collapsible=icon]:block"
+        />
       </SidebarHeader>
 
       <SidebarContent className="px-2 py-4">
@@ -97,8 +102,10 @@ export function AppSidebar() {
                       }
                     >
                       <Link href={item.url} className="flex items-center gap-3">
-                        <item.icon className="size-4" />
-                        <span>{item.title}</span>
+                        <item.icon className="size-4 shrink-0" />
+                        <span className="group-data-[collapsible=icon]:hidden">
+                          {item.title}
+                        </span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -126,10 +133,12 @@ export function AppSidebar() {
                       className="flex items-center justify-between"
                     >
                       <div className="flex items-center gap-3">
-                        <item.icon className="size-4" />
-                        <span>{item.title}</span>
+                        <item.icon className="size-4 shrink-0" />
+                        <span className="group-data-[collapsible=icon]:hidden">
+                          {item.title}
+                        </span>
                       </div>
-                      <ChevronRight className="size-3 text-muted-foreground/50" />
+                      <ChevronRight className="size-3 text-muted-foreground/50 group-data-[collapsible=icon]:hidden" />
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

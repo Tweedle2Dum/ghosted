@@ -9,6 +9,7 @@ import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/shared/ui/field";
+import { GoogleIcon } from "@/shared/ui/icons";
 import { Input } from "@/shared/ui/input";
 import { PasswordField } from "@/shared/ui/password-field";
 import { TypographyH2, TypographyP } from "@/shared/ui/typography";
@@ -87,7 +88,7 @@ export function LoginForm({
       <FieldGroup>
         <div className="flex flex-col gap-1 text-center sm:text-left">
           <TypographyH2 className="text-2xl font-bold tracking-tight">
-            Sign In to Ghosted
+            Sign In
           </TypographyH2>
           <TypographyP className="text-xs text-muted-foreground">
             Track your job applications, resumes, and interview pipeline.
@@ -169,18 +170,9 @@ export function LoginForm({
           onClick={handleGoogleLogin}
           disabled={isLoading}
         >
+          <GoogleIcon className="size-4" />
           Google
         </Button>
-
-        <p className="text-center text-xs text-muted-foreground">
-          Don&apos;t have an account?{" "}
-          <Link
-            href="/signup"
-            className="text-primary hover:underline font-semibold"
-          >
-            Create account
-          </Link>
-        </p>
       </FieldGroup>
     </form>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
+
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -9,6 +9,7 @@ import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/shared/ui/field";
+import { GoogleIcon } from "@/shared/ui/icons";
 import { Input } from "@/shared/ui/input";
 import { PasswordField } from "@/shared/ui/password-field";
 import { TypographyH2, TypographyP } from "@/shared/ui/typography";
@@ -92,7 +93,7 @@ export function SignupForm({
       <FieldGroup>
         <div className="flex flex-col gap-1 text-center sm:text-left">
           <TypographyH2 className="text-2xl font-bold tracking-tight">
-            Create Ghosted Account
+            Create Account
           </TypographyH2>
           <TypographyP className="text-xs text-muted-foreground">
             Start tracking your job applications and resumes.
@@ -194,18 +195,9 @@ export function SignupForm({
           onClick={handleGoogleLogin}
           disabled={isLoading}
         >
+          <GoogleIcon className="size-4" />
           Google
         </Button>
-
-        <p className="text-center text-xs text-muted-foreground">
-          Already have an account?{" "}
-          <Link
-            href="/login"
-            className="text-primary hover:underline font-semibold"
-          >
-            Sign in
-          </Link>
-        </p>
       </FieldGroup>
     </form>
   );

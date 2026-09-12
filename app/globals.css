@@ -94,96 +94,96 @@
   --font-tag: clamp(0.6875rem, 0.75vw, 0.75rem);
 
   /* Radius */
-  --radius: 0.75rem;
+  --radius: 0.375rem;
 
   /* Light Theme */
-  --background: #f8fafc;
-  --background-secondary: #f1f5f9;
-  --foreground: #090d16;
+  --background: #fafafa;
+  --background-secondary: #f4f4f5;
+  --foreground: #171717;
   --card: #ffffff;
-  --card-foreground: #090d16;
+  --card-foreground: #171717;
   --popover: #ffffff;
-  --popover-foreground: #090d16;
-  --primary: #2563eb;
+  --popover-foreground: #171717;
+  --primary: #171717;
   --primary-foreground: #ffffff;
-  --secondary: #f1f5f9;
-  --secondary-foreground: #1e293b;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --accent: #f1f5f9;
-  --accent-foreground: #090d16;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #171717;
+  --muted: #f4f4f5;
+  --muted-foreground: #737373;
+  --accent: #f4f4f5;
+  --accent-foreground: #171717;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
-  --border: #e2e8f0;
-  --input: #e2e8f0;
-  --ring: #2563eb;
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: #a3a3a3;
   --warning: #f59e0b;
-  --placeholder: #94a3b8;
+  --placeholder: #a3a3a3;
 
   /* Sidebar Details */
-  --sidebar: #ffffff;
-  --sidebar-foreground: #090d16;
-  --sidebar-primary: #2563eb;
+  --sidebar: #fafafa;
+  --sidebar-foreground: #171717;
+  --sidebar-primary: #171717;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f1f5f9;
-  --sidebar-accent-foreground: #090d16;
-  --sidebar-border: #e2e8f0;
-  --sidebar-ring: #2563eb;
-  --sidebar-item-active: #dbeafe;
+  --sidebar-accent: #f4f4f5;
+  --sidebar-accent-foreground: #171717;
+  --sidebar-border: #e5e5e5;
+  --sidebar-ring: #a3a3a3;
+  --sidebar-item-active: #e5e5e5;
   --sidebar-item-inactive: transparent;
 
   /* Extras */
   --surface: #ffffff;
-  --surface-foreground: #64748b;
-  --brand-deep: #1e3a8a;
+  --surface-foreground: #737373;
+  --brand-deep: #171717;
   --dialog: #ffffff;
-  --selection: #bfdbfe;
-  --selection-foreground: #1e3a8a;
-  --primary-light: #dbeafe;
+  --selection: #e5e5e5;
+  --selection-foreground: #171717;
+  --primary-light: #e5e5e5;
 }
 
 .dark {
-  --background: #090d16;
-  --background-secondary: #0f172a;
-  --foreground: #f8fafc;
-  --card: #0d1322;
-  --card-foreground: #f8fafc;
-  --popover: #0d1322;
-  --popover-foreground: #f8fafc;
-  --primary: #3b82f6;
-  --primary-foreground: #ffffff;
-  --secondary: #1e293b;
-  --secondary-foreground: #f8fafc;
-  --muted: #1e293b;
-  --muted-foreground: #94a3b8;
-  --accent: #1e293b;
-  --accent-foreground: #f8fafc;
+  --background: #0a0a0a;
+  --background-secondary: #171717;
+  --foreground: #ededed;
+  --card: #0a0a0a;
+  --card-foreground: #ededed;
+  --popover: #0a0a0a;
+  --popover-foreground: #ededed;
+  --primary: #ededed;
+  --primary-foreground: #0a0a0a;
+  --secondary: #262626;
+  --secondary-foreground: #ededed;
+  --muted: #262626;
+  --muted-foreground: #a3a3a3;
+  --accent: #262626;
+  --accent-foreground: #ededed;
   --destructive: #ef4444;
   --destructive-foreground: #ffffff;
-  --border: #1e293b;
-  --input: #1e293b;
-  --ring: #3b82f6;
+  --border: #262626;
+  --input: #262626;
+  --ring: #737373;
   --warning: #f59e0b;
-  --placeholder: #64748b;
+  --placeholder: #737373;
 
-  --sidebar: #0b101d;
-  --sidebar-foreground: #f8fafc;
-  --sidebar-primary: #3b82f6;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #1e293b;
-  --sidebar-accent-foreground: #f8fafc;
-  --sidebar-border: #1e293b;
-  --sidebar-ring: #3b82f6;
-  --sidebar-item-active: #1d4ed8;
+  --sidebar: #0a0a0a;
+  --sidebar-foreground: #ededed;
+  --sidebar-primary: #ededed;
+  --sidebar-primary-foreground: #0a0a0a;
+  --sidebar-accent: #262626;
+  --sidebar-accent-foreground: #ededed;
+  --sidebar-border: #262626;
+  --sidebar-ring: #737373;
+  --sidebar-item-active: #262626;
   --sidebar-item-inactive: transparent;
 
-  --surface: #0f172a;
-  --surface-foreground: #94a3b8;
-  --brand-deep: #3b82f6;
-  --dialog: #0d1322;
-  --selection: #1e3a8a;
-  --selection-foreground: #bfdbfe;
-  --primary-light: #1e3a8a;
+  --surface: #171717;
+  --surface-foreground: #a3a3a3;
+  --brand-deep: #ededed;
+  --dialog: #0a0a0a;
+  --selection: #262626;
+  --selection-foreground: #ededed;
+  --primary-light: #262626;
 }
 
 @layer base {

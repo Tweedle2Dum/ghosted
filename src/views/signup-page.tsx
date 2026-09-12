@@ -7,8 +7,8 @@ import { Spinner } from "@/shared/ui/spinner";
 
 export function SignupPage() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-12">
-      <div className="w-full max-w-sm space-y-6">
+    <div className="flex min-h-screen flex-col items-center justify-center px-4 py-12">
+      <div className="w-full max-w-lg space-y-6">
         <div className="flex flex-col items-center space-y-2 text-center">
           <Logo href="/" />
           <p className="text-xs text-muted-foreground">
