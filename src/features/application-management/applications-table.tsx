@@ -8,7 +8,10 @@ import {
   useTable,
 } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import { Badge } from "@/shared/ui/badge";
+import type {
+  Application,
+  ApplicationStatus,
+} from "@/entities/application/models";
 import { Button } from "@/shared/ui/button";
 import {
   DropdownMenu,
@@ -26,17 +29,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/ui/table";
-import type { Application, ApplicationStatus } from "./types";
-
-const STATUS_COLORS: Record<ApplicationStatus, string> = {
-  applied: "bg-blue-500/10 text-blue-500 hover:bg-blue-500/20",
-  screening: "bg-purple-500/10 text-purple-500 hover:bg-purple-500/20",
-  interview: "bg-indigo-500/10 text-indigo-500 hover:bg-indigo-500/20",
-  offer: "bg-green-500/10 text-green-500 hover:bg-green-500/20",
-  rejected: "bg-muted text-muted-foreground hover:bg-muted/80",
-  ghosted: "bg-muted text-muted-foreground hover:bg-muted/80",
-  withdrew: "bg-muted text-muted-foreground hover:bg-muted/80",
-};
+import { ApplicationStatusBadge } from "./ui/ApplicationStatusBadge";
 
 interface ApplicationsTableProps {
   data: Application[];
@@ -72,18 +65,24 @@ const columns = helper.columns([
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-auto p-0 hover:bg-transparent">
-              <Badge
-                variant="secondary"
-                className={`capitalize px-2 py-0.5 rounded-sm font-medium border-0 cursor-pointer ${STATUS_COLORS[status]}`}
-              >
-                {status}
-              </Badge>
+              <ApplicationStatusBadge
+                status={status}
+                className="cursor-pointer"
+              />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
             <DropdownMenuLabel>Update Status</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {Object.keys(STATUS_COLORS).map((s) => (
+            {[
+              "applied",
+              "screening",
+              "interview",
+              "offer",
+              "rejected",
+              "ghosted",
+              "withdrew",
+            ].map((s) => (
               <DropdownMenuItem key={s} className="capitalize">
                 {s}
               </DropdownMenuItem>

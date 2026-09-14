@@ -54,6 +54,7 @@ export type Database = {
           salary_range: string | null;
           source: string | null;
           updated_at: string | null;
+          user_id: string;
         };
         Insert: {
           company: string;
@@ -69,6 +70,7 @@ export type Database = {
           salary_range?: string | null;
           source?: string | null;
           updated_at?: string | null;
+          user_id: string;
         };
         Update: {
           company?: string;
@@ -84,6 +86,7 @@ export type Database = {
           salary_range?: string | null;
           source?: string | null;
           updated_at?: string | null;
+          user_id?: string;
         };
         Relationships: [
           {
@@ -91,6 +94,13 @@ export type Database = {
             columns: ["resume_version_id"];
             isOneToOne: false;
             referencedRelation: "resume_versions";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "fk_applications_user";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
             referencedColumns: ["id"];
           },
         ];
@@ -103,6 +113,7 @@ export type Database = {
           name: string;
           notes: string | null;
           target_role_type: string | null;
+          user_id: string;
         };
         Insert: {
           created_at?: string | null;
@@ -111,6 +122,7 @@ export type Database = {
           name: string;
           notes?: string | null;
           target_role_type?: string | null;
+          user_id: string;
         };
         Update: {
           created_at?: string | null;
@@ -119,8 +131,17 @@ export type Database = {
           name?: string;
           notes?: string | null;
           target_role_type?: string | null;
+          user_id?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "fk_resume_versions_user";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       status_events: {
         Row: {

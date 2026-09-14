@@ -15,51 +15,24 @@ import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Clock, GripVertical } from "lucide-react";
 import { useMemo, useState } from "react";
-import { Badge } from "@/shared/ui/badge";
+import type {
+  Application,
+  ApplicationStatus,
+} from "@/entities/application/models";
+import { cn } from "@/shared/lib/utils";
+import { Badge, badgeVariants } from "@/shared/ui/badge";
 import { ScrollArea, ScrollBar } from "@/shared/ui/scroll-area";
-import type { Application, ApplicationStatus } from "./types";
+import { statusConfig } from "./ui/ApplicationStatusBadge";
 
-const STATUSES: { id: ApplicationStatus; label: string; colorClass: string }[] =
-  [
-    {
-      id: "applied",
-      label: "Applied",
-      colorClass: "border-blue-500/20 bg-blue-500/5 text-blue-500",
-    },
-    {
-      id: "screening",
-      label: "Screening",
-      colorClass: "border-purple-500/20 bg-purple-500/5 text-purple-500",
-    },
-    {
-      id: "interview",
-      label: "Interview",
-      colorClass: "border-indigo-500/20 bg-indigo-500/5 text-indigo-500",
-    },
-    {
-      id: "offer",
-      label: "Offer",
-      colorClass: "border-green-500/20 bg-green-500/5 text-green-500",
-    },
-    {
-      id: "rejected",
-      label: "Rejected",
-      colorClass:
-        "border-muted-foreground/20 bg-muted/30 text-muted-foreground",
-    },
-    {
-      id: "ghosted",
-      label: "Ghosted",
-      colorClass:
-        "border-muted-foreground/20 bg-muted/30 text-muted-foreground",
-    },
-    {
-      id: "withdrew",
-      label: "Withdrew",
-      colorClass:
-        "border-muted-foreground/20 bg-muted/30 text-muted-foreground",
-    },
-  ];
+const STATUSES: { id: ApplicationStatus; label: string }[] = [
+  { id: "applied", label: "Applied" },
+  { id: "screening", label: "Screening" },
+  { id: "interview", label: "Interview" },
+  { id: "offer", label: "Offer" },
+  { id: "rejected", label: "Rejected" },
+  { id: "ghosted", label: "Ghosted" },
+  { id: "withdrew", label: "Withdrew" },
+];
 
 function KanbanCard({
   application,
@@ -121,7 +94,7 @@ function KanbanColumn({
   status,
   applications,
 }: {
-  status: (typeof STATUSES)[0];
+  status: { id: ApplicationStatus; label: string };
   applications: Application[];
 }) {
   const { setNodeRef, isOver } = useDroppable({
@@ -131,11 +104,12 @@ function KanbanColumn({
   return (
     <div className="flex flex-col flex-shrink-0 w-72">
       <div
-        className={`flex items-center justify-between mb-3 px-3 py-1.5 rounded-md border ${status.colorClass}`}
+        className={cn(
+          badgeVariants({ variant: statusConfig[status.id].variant }),
+          "flex w-full items-center justify-between mb-3 px-3 py-2 rounded-md text-sm",
+        )}
       >
-        <span className="text-xs font-semibold uppercase tracking-wider">
-          {status.label}
-        </span>
+        <span className="font-semibold">{status.label}</span>
         <span className="text-xs font-medium bg-background/50 rounded-full px-2 py-0.5">
           {applications.length}
         </span>

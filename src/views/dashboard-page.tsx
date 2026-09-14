@@ -1,82 +1,18 @@
 "use client";
 
-import { Kanban, LayoutList, Plus } from "lucide-react";
+import { Kanban, LayoutList } from "lucide-react";
 import { useState } from "react";
+import { AddApplicationModal } from "@/features/application-management/add-application-modal";
 import { ApplicationsKanban } from "@/features/application-management/applications-kanban";
 import { ApplicationsTable } from "@/features/application-management/applications-table";
-import type { Application } from "@/features/application-management/types";
-import { Button } from "@/shared/ui/button";
+import { useApplications } from "@/features/application-management/hooks";
 import { ToggleGroup, ToggleGroupItem } from "@/shared/ui/toggle-group";
-
-// ============================================================================
-// MOCK DATA
-// ============================================================================
-export const MOCK_APPLICATIONS: Application[] = [
-  {
-    id: "1",
-    company: "Acme Corp",
-    roleTitle: "Senior Frontend Engineer",
-    source: "LinkedIn",
-    resumeVersionName: "Frontend Lead v2",
-    dateApplied: "2026-09-01",
-    currentStatus: "interview",
-    priority: 1,
-    daysInStatus: 3,
-    lastUpdateDate: "2026-09-09",
-  },
-  {
-    id: "2",
-    company: "Vercel",
-    roleTitle: "Staff Software Engineer",
-    source: "Referral",
-    resumeVersionName: "Fullstack Staff",
-    dateApplied: "2026-09-05",
-    currentStatus: "screening",
-    priority: 2,
-    daysInStatus: 2,
-    lastUpdateDate: "2026-09-10",
-  },
-  {
-    id: "3",
-    company: "Supabase",
-    roleTitle: "Frontend Engineer",
-    source: "Company Website",
-    resumeVersionName: "Frontend Lead v2",
-    dateApplied: "2026-08-25",
-    currentStatus: "rejected",
-    priority: 0,
-    daysInStatus: 12,
-    lastUpdateDate: "2026-08-30",
-  },
-  {
-    id: "4",
-    company: "Stripe",
-    roleTitle: "UI Engineer",
-    source: "Y Combinator",
-    resumeVersionName: "Frontend UI Specialist",
-    dateApplied: "2026-09-08",
-    currentStatus: "applied",
-    priority: 1,
-    daysInStatus: 4,
-    lastUpdateDate: "2026-09-08",
-  },
-  {
-    id: "5",
-    company: "Linear",
-    roleTitle: "Product Engineer",
-    source: "Twitter",
-    resumeVersionName: "Fullstack Staff",
-    dateApplied: "2026-09-02",
-    currentStatus: "offer",
-    priority: 3,
-    daysInStatus: 1,
-    lastUpdateDate: "2026-09-11",
-  },
-];
 
 export function DashboardPage() {
   const [view, setView] = useState<"table" | "kanban">("table");
-  const pendingCount = MOCK_APPLICATIONS.filter(
+  const { data: applications } = useApplications();
+
+  const pendingCount = applications.filter(
     (a) => a.currentStatus === "applied",
   ).length;
 
@@ -120,10 +56,7 @@ export function DashboardPage() {
               <Kanban className="size-4" />
             </ToggleGroupItem>
           </ToggleGroup>
-          <Button size="sm">
-            <Plus className="size-3.5 mr-1.5" />
-            Add application
-          </Button>
+          <AddApplicationModal />
         </div>
       </div>
 
@@ -131,11 +64,11 @@ export function DashboardPage() {
       <div>
         {view === "table" ? (
           <div className="rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden">
-            <ApplicationsTable data={MOCK_APPLICATIONS} />
+            <ApplicationsTable data={applications} />
           </div>
         ) : (
           <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-            <ApplicationsKanban data={MOCK_APPLICATIONS} />
+            <ApplicationsKanban data={applications} />
           </div>
         )}
       </div>
