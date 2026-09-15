@@ -7,10 +7,10 @@ import {
   tableFeatures,
   useTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
-import type {
-  Application,
-  ApplicationStatus,
+import { ArrowUpDown } from "lucide-react";
+import {
+  APPLICATION_STATUSES,
+  type Application,
 } from "@/entities/application/models";
 import { Button } from "@/shared/ui/button";
 import {
@@ -29,7 +29,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/ui/table";
+import { useUpdateApplicationStatus } from "./hooks";
 import { ApplicationStatusBadge } from "./ui/ApplicationStatusBadge";
+import { ApplicationTableActionsMenu } from "./ui/application-table-actions-menu";
 
 interface ApplicationsTableProps {
   data: Application[];
@@ -43,6 +45,43 @@ const features = tableFeatures({
 });
 
 const helper = createColumnHelper<typeof features, Application>();
+
+function ApplicationTableStatusMenu({
+  application,
+}: {
+  application: Application;
+}) {
+  const updateStatus = useUpdateApplicationStatus();
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-auto p-0 hover:bg-transparent">
+          <ApplicationStatusBadge
+            status={application.currentStatus}
+            className="cursor-pointer"
+          />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start">
+        <DropdownMenuLabel>Update Status</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        {APPLICATION_STATUSES.map((s) => (
+          <DropdownMenuItem
+            key={s}
+            className="capitalize"
+            onSelect={() => {
+              updateStatus.mutate({ applicationId: application.id, status: s });
+            }}
+            disabled={updateStatus.isPending}
+          >
+            {s}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
 
 const columns = helper.columns([
   helper.accessor("company", {
@@ -59,38 +98,9 @@ const columns = helper.columns([
   }),
   helper.accessor("currentStatus", {
     header: "Status",
-    cell: ({ row }) => {
-      const status = row.getValue("currentStatus") as ApplicationStatus;
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-auto p-0 hover:bg-transparent">
-              <ApplicationStatusBadge
-                status={status}
-                className="cursor-pointer"
-              />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
-            <DropdownMenuLabel>Update Status</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {[
-              "applied",
-              "screening",
-              "interview",
-              "offer",
-              "rejected",
-              "ghosted",
-              "withdrew",
-            ].map((s) => (
-              <DropdownMenuItem key={s} className="capitalize">
-                {s}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => (
+      <ApplicationTableStatusMenu application={row.original} />
+    ),
   }),
   helper.accessor("dateApplied", {
     header: ({ column }) => {
@@ -111,38 +121,21 @@ const columns = helper.columns([
     header: "Resume",
     cell: ({ row }) => (
       <div className="text-muted-foreground">
-        {row.getValue("resumeVersionName")}
+        {row.getValue("resumeVersionName") || "-"}
       </div>
     ),
   }),
   helper.accessor("daysInStatus", {
-    header: "Days in Status",
+    header: () => <div className="text-right pr-4">Days in Status</div>,
     cell: ({ row }) => (
       <div className="text-right pr-4">{row.getValue("daysInStatus")}d</div>
     ),
   }),
   helper.display({
     id: "actions",
-    cell: () => {
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="size-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>View details</DropdownMenuItem>
-            <DropdownMenuItem>Edit application</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-destructive">
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: ({ row }) => (
+      <ApplicationTableActionsMenu application={row.original} />
+    ),
   }),
 ]);
 

@@ -1,11 +1,14 @@
-export type ApplicationStatus =
-  | "applied"
-  | "screening"
-  | "interview"
-  | "offer"
-  | "rejected"
-  | "ghosted"
-  | "withdrew";
+export const APPLICATION_STATUSES = [
+  "applied",
+  "screening",
+  "interview",
+  "offer",
+  "rejected",
+  "ghosted",
+  "withdrew",
+] as const;
+
+export type ApplicationStatus = (typeof APPLICATION_STATUSES)[number];
 
 export interface Application {
   id: string;

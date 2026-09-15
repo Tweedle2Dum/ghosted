@@ -67,3 +67,38 @@ export async function insertApplication(
     error: null,
   };
 }
+
+/**
+ * Updates the status of an application.
+ */
+export async function updateApplicationStatus(
+  applicationId: string,
+  userId: string,
+  status: string,
+): Promise<DbResult<Application>> {
+  const { data, error } = await supabaseAdmin
+    .from("applications")
+    .update({ current_status: status })
+    .eq("id", applicationId)
+    .eq("user_id", userId)
+    .select("*, resume_versions(name)")
+    .single();
+
+  if (error || !data) {
+    console.error(
+      "[db:application] Failed to update application status:",
+      error,
+    );
+    return {
+      data: null,
+      error: error
+        ? mapDbError(error, "Failed to update application status")
+        : new AppError("Failed to update application status"),
+    };
+  }
+
+  return {
+    data: mapApplicationRecord(data),
+    error: null,
+  };
+}

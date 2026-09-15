@@ -4,6 +4,7 @@ import { LoginForm } from "@/features/auth";
 import { Card, CardContent } from "@/shared/ui/card";
 import { Logo } from "@/shared/ui/logo";
 import { Spinner } from "@/shared/ui/spinner";
+import { TypographyInfo } from "@/shared/ui/typography";
 
 export function LoginPage() {
   return (
@@ -11,9 +12,9 @@ export function LoginPage() {
       <div className="w-full max-w-lg space-y-6">
         <div className="flex flex-col items-center space-y-2 text-center">
           <Logo href="/" />
-          <p className="text-xs text-muted-foreground">
+          <TypographyInfo className="text-muted-foreground">
             Sign in to access your autonomous workspace
-          </p>
+          </TypographyInfo>
         </div>
 
         <Card className="border-border/70 shadow-lg shadow-black/5 p-6">
@@ -30,7 +31,7 @@ export function LoginPage() {
           </CardContent>
         </Card>
 
-        <p className="text-center text-xs text-muted-foreground">
+        <TypographyInfo className="text-center text-muted-foreground">
           Don&apos;t have an account yet?{" "}
           <Link
             href="/signup"
@@ -38,7 +39,7 @@ export function LoginPage() {
           >
             Create account
           </Link>
-        </p>
+        </TypographyInfo>
       </div>
     </div>
   );

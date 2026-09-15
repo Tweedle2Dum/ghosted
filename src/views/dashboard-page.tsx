@@ -1,12 +1,13 @@
 "use client";
 
-import { Kanban, LayoutList } from "lucide-react";
+import { Columns3, LayoutList } from "lucide-react";
 import { useState } from "react";
-import { AddApplicationModal } from "@/features/application-management/add-application-modal";
 import { ApplicationsKanban } from "@/features/application-management/applications-kanban";
 import { ApplicationsTable } from "@/features/application-management/applications-table";
+import { CreateApplicationWizard } from "@/features/application-management/create-application-wizard";
 import { useApplications } from "@/features/application-management/hooks";
 import { ToggleGroup, ToggleGroupItem } from "@/shared/ui/toggle-group";
+import { TypographyH3, TypographyInfo } from "@/shared/ui/typography";
 
 export function DashboardPage() {
   const [view, setView] = useState<"table" | "kanban">("table");
@@ -21,16 +22,14 @@ export function DashboardPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Applications
-          </h2>
-          <p className="text-xs text-muted-foreground mt-0.5">
+          <TypographyH3>Applications</TypographyH3>
+          <TypographyInfo className="text-muted-foreground mt-0.5">
             You have{" "}
             <span className="text-foreground font-medium">
               {pendingCount} pending review
             </span>{" "}
             items requiring action.
-          </p>
+          </TypographyInfo>
         </div>
         <div className="flex items-center gap-2">
           <ToggleGroup
@@ -43,20 +42,22 @@ export function DashboardPage() {
               value="table"
               size="sm"
               aria-label="Table View"
-              className="h-7 px-2"
+              className="px-2"
             >
-              <LayoutList className="size-4" />
+              <LayoutList className="size-4 mr-1.5" />
+              Table
             </ToggleGroupItem>
             <ToggleGroupItem
               value="kanban"
               size="sm"
               aria-label="Kanban View"
-              className="h-7 px-2"
+              className="px-2"
             >
-              <Kanban className="size-4" />
+              <Columns3 className="size-4 mr-1.5" />
+              Kanban
             </ToggleGroupItem>
           </ToggleGroup>
-          <AddApplicationModal />
+          <CreateApplicationWizard />
         </div>
       </div>
 

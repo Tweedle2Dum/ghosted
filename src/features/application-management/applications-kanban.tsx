@@ -15,6 +15,7 @@ import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Clock, GripVertical } from "lucide-react";
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
 import type {
   Application,
   ApplicationStatus,
@@ -128,6 +129,8 @@ function KanbanColumn({
   );
 }
 
+import { useUpdateApplicationStatus } from "./hooks";
+
 interface ApplicationsKanbanProps {
   data: Application[];
   onDataChange?: (newData: Application[]) => void;
@@ -139,6 +142,8 @@ export function ApplicationsKanban({
 }: ApplicationsKanbanProps) {
   const [localData, setLocalData] = useState<Application[]>(data);
   const [activeId, setActiveId] = useState<string | null>(null);
+
+  const updateStatus = useUpdateApplicationStatus();
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -165,6 +170,7 @@ export function ApplicationsKanban({
       const newStatus = over.id as ApplicationStatus;
 
       if (activeApp && newStatus && activeApp.currentStatus !== newStatus) {
+        const previousData = [...localData];
         const newData = localData.map((app) =>
           app.id === activeApp.id
             ? { ...app, currentStatus: newStatus, daysInStatus: 0 }
@@ -172,6 +178,18 @@ export function ApplicationsKanban({
         );
         setLocalData(newData);
         onDataChange?.(newData);
+
+        // Persist the change to the backend
+        updateStatus.mutate(
+          { applicationId: activeApp.id, status: newStatus },
+          {
+            onError: (error) => {
+              toast.error(error.message || "Failed to update status");
+              setLocalData(previousData);
+              onDataChange?.(previousData);
+            },
+          },
+        );
       }
     }
   };

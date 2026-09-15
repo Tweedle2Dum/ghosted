@@ -9,19 +9,18 @@ import {
   CardTitle,
 } from "@/shared/ui/card";
 import { MetricCard } from "@/shared/ui/metric-card";
+import { TypographyH3, TypographyInfo } from "@/shared/ui/typography";
 
 export function AnalyticsPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-foreground">
-            Analytics & System Telemetry
-          </h2>
-          <p className="text-xs text-muted-foreground mt-0.5">
+          <TypographyH3>Analytics & System Telemetry</TypographyH3>
+          <TypographyInfo className="text-muted-foreground mt-0.5">
             Observability telemetry, compute efficiency, and endpoint
             performance.
-          </p>
+          </TypographyInfo>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm">
@@ -102,10 +101,12 @@ export function AnalyticsPage() {
                 className="flex items-center justify-between rounded-xl border border-border/50 bg-secondary/30 p-3 text-xs"
               >
                 <div>
-                  <p className="font-semibold text-foreground">{node.region}</p>
-                  <p className="text-[11px] text-muted-foreground">
+                  <TypographyInfo className="text-foreground">
+                    {node.region}
+                  </TypographyInfo>
+                  <TypographyInfo className="text-muted-foreground">
                     p50: {node.p50} · p99: {node.p99}
-                  </p>
+                  </TypographyInfo>
                 </div>
                 <span className="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
                   {node.status}

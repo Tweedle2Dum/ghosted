@@ -1,7 +1,10 @@
 "use server";
 
 import { unauthorized } from "next/navigation";
-import { insertApplication } from "@/entities/application/db/ops";
+import {
+  insertApplication,
+  updateApplicationStatus,
+} from "@/entities/application/db/ops";
 import { AppError } from "@/shared/lib/errors";
 import { formDataToObject } from "@/shared/lib/form-data";
 import { getSession } from "@/shared/lib/session";
@@ -81,4 +84,29 @@ export async function createApplication(formData: FormData) {
   }
 
   return newApp;
+}
+
+export async function updateApplicationStatusAction({
+  applicationId,
+  status,
+}: {
+  applicationId: string;
+  status: string;
+}) {
+  const session = await getSession();
+  if (!session) {
+    unauthorized();
+  }
+
+  const { error, data: updatedApp } = await updateApplicationStatus(
+    applicationId,
+    session.id,
+    status,
+  );
+
+  if (error) {
+    throw new AppError(error.message || "Failed to update application status");
+  }
+
+  return updatedApp;
 }
