@@ -43,7 +43,36 @@ export function useUpdateApplicationStatus() {
 
   return useMutation({
     mutationFn: updateApplicationStatusAction,
-    onSuccess: () => {
+    onMutate: async ({ applicationId, status }) => {
+      await queryClient.cancelQueries({ queryKey: applicationKeys.lists() });
+
+      const previousApplications = queryClient.getQueryData<Application[]>(
+        applicationKeys.lists(),
+      );
+
+      if (previousApplications) {
+        queryClient.setQueryData<Application[]>(
+          applicationKeys.lists(),
+          (old) =>
+            old?.map((app) =>
+              app.id === applicationId
+                ? { ...app, currentStatus: status, daysInStatus: 0 }
+                : app,
+            ) ?? [],
+        );
+      }
+
+      return { previousApplications };
+    },
+    onError: (_err, _variables, context) => {
+      if (context?.previousApplications) {
+        queryClient.setQueryData(
+          applicationKeys.lists(),
+          context.previousApplications,
+        );
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: applicationKeys.lists() });
     },
   });

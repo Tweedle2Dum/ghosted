@@ -133,14 +133,9 @@ import { useUpdateApplicationStatus } from "./hooks";
 
 interface ApplicationsKanbanProps {
   data: Application[];
-  onDataChange?: (newData: Application[]) => void;
 }
 
-export function ApplicationsKanban({
-  data,
-  onDataChange,
-}: ApplicationsKanbanProps) {
-  const [localData, setLocalData] = useState<Application[]>(data);
+export function ApplicationsKanban({ data }: ApplicationsKanbanProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
 
   const updateStatus = useUpdateApplicationStatus();
@@ -153,8 +148,8 @@ export function ApplicationsKanban({
   );
 
   const activeApplication = useMemo(
-    () => localData.find((app) => app.id === activeId),
-    [activeId, localData],
+    () => data.find((app) => app.id === activeId),
+    [activeId, data],
   );
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -170,23 +165,12 @@ export function ApplicationsKanban({
       const newStatus = over.id as ApplicationStatus;
 
       if (activeApp && newStatus && activeApp.currentStatus !== newStatus) {
-        const previousData = [...localData];
-        const newData = localData.map((app) =>
-          app.id === activeApp.id
-            ? { ...app, currentStatus: newStatus, daysInStatus: 0 }
-            : app,
-        );
-        setLocalData(newData);
-        onDataChange?.(newData);
-
-        // Persist the change to the backend
+        // Persist the change to the backend (optimistic update handled by React Query)
         updateStatus.mutate(
           { applicationId: activeApp.id, status: newStatus },
           {
             onError: (error) => {
               toast.error(error.message || "Failed to update status");
-              setLocalData(previousData);
-              onDataChange?.(previousData);
             },
           },
         );
@@ -207,7 +191,7 @@ export function ApplicationsKanban({
             <KanbanColumn
               key={status.id}
               status={status}
-              applications={localData.filter(
+              applications={data.filter(
                 (app) => app.currentStatus === status.id,
               )}
             />

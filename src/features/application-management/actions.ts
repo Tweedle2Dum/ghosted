@@ -5,11 +5,11 @@ import {
   insertApplication,
   updateApplicationStatus,
 } from "@/entities/application/db/ops";
+import type { ApplicationStatus } from "@/entities/application/models";
 import { AppError } from "@/shared/lib/errors";
 import { formDataToObject } from "@/shared/lib/form-data";
 import { getSession } from "@/shared/lib/session";
 import { supabaseAdmin } from "@/shared/lib/supabase-server";
-
 import { addApplicationSchema } from "./validators";
 
 export async function createApplication(formData: FormData) {
@@ -91,7 +91,7 @@ export async function updateApplicationStatusAction({
   status,
 }: {
   applicationId: string;
-  status: string;
+  status: ApplicationStatus;
 }) {
   const session = await getSession();
   if (!session) {
